@@ -5,12 +5,14 @@ import {
   ApplicationRef,
   createComponent,
   EnvironmentInjector,
-} from '@angular/core';
+  Inject,
+} from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 
 export interface ModalComponent extends Object {}
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ModalService {
   private modalHost!: HTMLDivElement;
@@ -26,21 +28,22 @@ export class ModalService {
   constructor(
     private appRef: ApplicationRef,
     private environmentInjector: EnvironmentInjector,
+    @Inject(DOCUMENT) private document: Document,
   ) {
-    this.modalHost = document.createElement('div');
-    this.modalHost.classList.add('modal-host');
-    document.body.appendChild(this.modalHost);
+    this.modalHost = this.document.createElement("div");
+    this.modalHost.classList.add("modal-host");
+    this.document.body.appendChild(this.modalHost);
   }
 
   public open<C extends ModalComponent>(
     ComponentClass: Type<C>,
     bindings?: Partial<C>,
   ) {
-    document.body.classList.add('modal-open');
+    this.document.body.classList.add("modal-open");
 
     // Create dialog element
-    const dialogElement = document.createElement('dialog');
-    dialogElement.classList.add('content');
+    const dialogElement = this.document.createElement("dialog");
+    dialogElement.classList.add("content");
     this.modalHost.appendChild(dialogElement);
 
     // Create component inside the dialog
@@ -67,11 +70,11 @@ export class ModalService {
     // Use showModal instead of setAttribute('open', '')
     dialogElement.showModal();
 
-    dialogElement.addEventListener('cancel', (event) => {
+    dialogElement.addEventListener("cancel", (event) => {
       event.preventDefault();
       this.close(componentRef.instance);
     });
-    dialogElement.addEventListener('mousedown', (event) => {
+    dialogElement.addEventListener("mousedown", (event) => {
       const rect = dialogElement.getBoundingClientRect();
       const isInDialog =
         event.clientX >= rect.left &&
@@ -108,7 +111,7 @@ export class ModalService {
     }
 
     if (this.modals.length === 0) {
-      document.body.classList.remove('modal-open');
+      this.document.body.classList.remove("modal-open");
     }
   }
 }
