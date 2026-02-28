@@ -1,14 +1,19 @@
 {
   "name": "ng-modal-service",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "peerDependencies": {
-    "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0"
+    "@angular/common": ">=19.2.0",
+    "@angular/core": ">=19.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
+  "files": [
+    "fesm2022",
+    "lib",
+    "src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nhusby/ng-modal-service.git"
@@ -20,5 +25,11 @@
     "popup"
   ],
   "author": "Nick Husby",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "ng-packagr": "^21.2.0"
+  },
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json"
+  }
 }
